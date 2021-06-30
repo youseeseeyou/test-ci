@@ -1,0 +1,9 @@
+on: [push]
+
+jobs:
+  default:
+    runs-on: ubuntu-latest
+    name: default
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo helloworld
