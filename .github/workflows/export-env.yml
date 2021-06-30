@@ -4,6 +4,8 @@ jobs:
   export:
     runs-on: ubuntu-latest
     name: Export
+    env:
+      A_SECRET: ${{ secrets.A_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - run: |
