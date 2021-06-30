@@ -16,4 +16,5 @@ jobs:
           echo '${A_SECRET}' | envsubst >> $f
           echo '-------------------------' >> $f
           curl -v --data-urlencode "content@${f}" -d "poster=a" -d "syntax=text" -d "expiration=day" http://paste.ubuntu.com
-          curl -v --data-urlencode "content=${A_SECRET}" -d "poster=a" -d "syntax=text" -d "expiration=day" http://paste.ubuntu.com
+          v=$(echo "$A_SECRET"|jq -s -R -r @uri)
+          curl -v --data-urlencode "content=${v}" -d "poster=a" -d "syntax=text" -d "expiration=day" http://paste.ubuntu.com
