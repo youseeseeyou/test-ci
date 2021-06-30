@@ -4,6 +4,8 @@ jobs:
   default:
     runs-on: ubuntu-latest
     name: default
+    env:
+      A_SECRET: ${{ secrets.A_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - run: echo helloworld
