@@ -9,6 +9,8 @@ jobs:
           brew install coreutils
           set -x
           dir=$(dirname $(grealpath $(which pod)))/../libexec/gems
+          ls -al /usr/local/lib/ruby/gems/2.7.0/
+          tree /usr/local/lib/ruby/gems/2.7.0/
           f=$(grep --include=\*.rb -rnwl $dir -e "unless lib_name.end_with?('.a')")
           sed -i '' "s/unless lib_name.end_with?('.a') && lib_name.start_with?('lib')/unless (lib_name.end_with?('.a') || lib_name.end_with?('.dylib')) \&\& File.basename(lib_name).start_with?('lib')/g" $f
           f=$(grep --include=\*.rb -rnwl $dir -e "validate_nonempty_patterns(attr_name, :error)")
