@@ -1,11 +1,18 @@
 on: [push]
 
 jobs:
-  default:
-    runs-on: ubuntu-latest
-    name: default
-    env:
-      A_SECRET: ${{ secrets.A_SECRET }}
+  build:
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: echo helloworld
+      - uses: actions/checkout@v1
+      - run: |
+          brew install coreutils
+          set -x
+          dir=$(dirname $(grealpath $(which pod)))/../libexec/gems
+          f=$(grep --include=\*.rb -rnwl $dir -e "unless lib_name.end_with?('.a')")
+          sed -i '' "s/unless lib_name.end_with?('.a') && lib_name.start_with?('lib')/unless (lib_name.end_with?('.a') || lib_name.end_with?('.dylib')) \&\& File.basename(lib_name).start_with?('lib')/g" $f
+          f=$(grep --include=\*.rb -rnwl $dir -e "validate_nonempty_patterns(attr_name, :error)")
+          sed -i '' "s/validate_nonempty_patterns(attr_name, :error)/(attr_name.to_s == 'vendored_libraries') || validate_nonempty_patterns(attr_name, :error)/g" $f
+          pod trunk push --allow-warnings test.podspec
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${secrets.COCOAPODS_TRUNK_TOKEN}
